@@ -7,6 +7,3 @@ define( 'DB_USER', 'seonzoo' );
 
 // Mysql database password
 define( 'DB_PASSWORD', '1234' );
-
-// defined Templates path
-define( 'TEMPPATH', ABSPATH . 'templates' );
