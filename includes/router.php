@@ -1,5 +1,18 @@
 <?php
 
-$slug = ! empty( $_GET[ 'page' ] ) ? $_GET[ 'page' ] : 'index';
+$page_slug = 'index';
 
-template_loader( $slug );
+if ( ! empty( $_GET[ 'page' ] ) ) {
+
+	$page_slug = $_GET[ 'page' ];
+
+}
+
+else {
+
+	$uris = explode( '/', $_SERVER[ 'REQUEST_URI' ] );
+	$page_slug = $uris[ 1 ];
+
+}
+
+template_loader( $page_slug );
