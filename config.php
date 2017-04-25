@@ -4,10 +4,10 @@
 define( 'DB_NAME', 'kitten' );
 
 // Database username
-define( 'DB_USER', 'kitten' );
+define( 'DB_USER', 'root' );
 
 // Database password
-define( 'DB_PASSWORD', '1234' );
+define( 'DB_PASSWORD', 'autoset' );
 
 // Database hostname
 define( 'DB_HOST', 'localhost' );
