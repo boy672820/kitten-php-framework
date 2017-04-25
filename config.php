@@ -16,7 +16,10 @@ define( 'DB_HOST', 'localhost' );
 define( 'DB_CHARSET', 'utf8' );
 
 // Database collate type
-define( 'DB_COLLATE', '' );
+define( 'DB_COLLATE', 'utf8_general_ci' );
+
+// Debug mode
+define( 'DEBUG', 'development' );
 
 // Framework common prefix
 define( 'PREFIX', 'kitten_' );

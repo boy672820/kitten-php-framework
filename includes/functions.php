@@ -1,5 +1,20 @@
 <?php
 
+function debug( $message ) {
+	if ( DEBUG === 'development' ) {
+		echo $message . '<br>';
+	}
+}
+
+function now( $print = true ) {
+	$date = date( 'Y-m-d H:i:s' );
+
+	if ( $print )
+		echo $date;
+	else
+		return $date;
+}
+
 function home_url( $path = '', $print = true ) {
 	$url = $_SERVER[ 'REQUEST_SCHEME' ] . '://' . $_SERVER[ 'HTTP_HOST' ] . $path;
 	if ( $print )
