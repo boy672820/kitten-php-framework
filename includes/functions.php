@@ -31,7 +31,7 @@ function resource_path_url( $resource_file = '', $print = true ) {
 		$resource_extension = explode( '.', $resource_file );
 		$resource_extension = trim( $resource_extension[ count( $resource_extension ) - 1 ] );
 
-		switch( $resource_extension ) {
+		switch ( $resource_extension ) {
 			// Cascading style sheets file
 			case 'css':
 				$path = '/stylesheets/' . $resource_file;

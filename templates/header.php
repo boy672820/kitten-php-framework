@@ -28,7 +28,7 @@
 
 		<div class="container">
 
-			<h1 class="logo">Ahpro Health</h1>
+			<!-- <h1 class="logo">Ahpro Health</h1>
 
 			<nav class="main-nav">
 				<ul class="main-menu">
@@ -36,7 +36,7 @@
 					<li class="main-menu__item"><a href="#" class="main-menu__anchor">의사찾기</a></li>
 					<li class="main-menu__item"><a href="#" class="main-menu__anchor">후기</a></li>
 				</ul>
-			</nav><!-- //.main-nav -->
+			</nav> --><!-- //.main-nav -->
 
 			<nav class="util-nav">
 				<ul class="util-menu">
