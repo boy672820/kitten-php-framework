@@ -112,43 +112,29 @@ class DB {
 	 * @param ( Array ) $where
 	 * @see $this->execute( String )
 	 */
-	public function select( $tablename = '', $fields = array(), $where = array() ) {
+	public function select( $tablename = '', $fields = '*', $where = array() ) {
 		$target_table = $this->table;
 
 		$columns = '';
-		foreach ( $fields as $field ) {
-			$columns .= $field . ',';
-		}
-		$columns = substr( $columns, 0, -1 );
-
-		$conditions = '';
-		$i = 0;
-		foreach ( $where as $key=>$obj ) {
-			$next = $where[ $i ];
-
-			if ( $key === 'relation' ) {
-				foreach ( $next as $value ) {
-					var_dump( $value );
-					echo '<br />';
-				}
-				break;
+		if ( gettype( $fields ) === 'array' ) {
+			foreach ( $fields as $field ) {
+				$columns .= $field . ',';
 			}
-
-			if ( gettype( $obj ) === 'array' ) {
-				echo $key;
-				break;
-			}
-
-			$conditions .= $key . '=\'' . $obj . '\' AND ';
+			$columns = substr( $columns, 0, -1 );
 		}
-		$conditions = substr( $conditions, 0, -5 );
+		else if ( gettype( $fields ) === 'string' ) {
+			$columns = $fields;
+		}
 
-		$query = "SELECT {$columns} FROM {$target_table} WHERE {$conditions}";
+		$condition = $this->relation( $where );
+
+
+		$query = "SELECT {$columns} FROM {$target_table} WHERE {$condition}";
 		// echo $query;
 		$i += 1;
 	}
 
-	public function relation( $obj = array(), $relation = 'AND' ) {
+	public function condition( $obj = array(), $attr = array( 'type' => 'relation', 'value' => 'AND' ) ) {
 		$obj_keys = array_keys( $obj );
 
 		$i = -1;
@@ -156,25 +142,37 @@ class DB {
 		$query = '';
 		$query_array = array();
 
+		$relation = $attr[ 'type' ] === 'relation' ? $attr[ 'value' ] : 'AND';
+		$compare = $attr[ 'type' ] === 'compare' ? $attr[ 'value' ] : '=';
+
 		while ( $count >= $i ++ ) {
 			$key = $obj_keys[ $i ];
 			$value = $obj[ $key ];
 
-			if ( $key === 'relation' ) {
-				$query .= $this->relation( $obj[ $obj_keys[ $i + 1 ] ], $value );
-				break;
+			if ( ! empty( $obj_keys[ $i + 1 ] ) ) {
+
+				if ( $key === 'relation' ) {
+					$query .= $this->condition( $obj[ $obj_keys[ $i + 1 ] ], array( 'type' => 'relation', 'value' => $value ) );
+					break;
+				}
+
+				if ( $key === 'compare' ) {
+					$query .= $this->condition( $obj[ $obj_keys[ $i + 1 ] ], array( 'type' => 'compare', 'value' => $value ) );
+					break;
+				}
+
 			}
 
 			if ( gettype( $value ) === 'array' ) {
 				$query .= '(';
-				$query .= $this->relation( $value );
-				$query .= ')' . $relation;
+				$query .= $this->condition( $value );
+				$query .= ') ' . $relation . ' ';
 				continue;
 			}
 
-			// $query .= $key . '=\'' . $value . '\' ' . $relation . ' ';
-			array_push( $query_array, $key . '=\'' . $value . '\' ', $relation . ' ' );
+			array_push( $query_array, $key . ' ' . $compare . ' \'' . $value . '\'', ' ' . $relation . ' ' );
 		}
+
 		array_pop( $query_array );
 		$query .= $this->array_serialize_print( $query_array );
 
@@ -189,22 +187,24 @@ class DB {
 }
 
 $db = new DB( DB_HOST, DB_NAME, DB_USER, DB_PASSWORD );
-var_dump(
-	$db->relation(
+
+echo $db->condition(
 		array(
 			'relation' => 'OR',
 			array(
 				array(
-					'type' => 'post',
-					'status' => 'publish'
+					array(
+						'compare' => 'like',
+						array(
+							'type' => '%post%',
+						)
+					),
+					'compare' =>'tester'
 				),
-				array(
-					'title' => 'test'
-				)
+				'title' => 'test'
 			)
 		)
-	)
-);
+	);
 
 // echo '<hr />';
 //
